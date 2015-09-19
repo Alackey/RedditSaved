@@ -1,5 +1,5 @@
 from app import app
-from flask import request
+from flask import request, render_template
 from pprint import pprint
 import praw, webbrowser
 
@@ -7,7 +7,19 @@ import praw, webbrowser
 @app.route('/index')
 def index():
     rule = request.url_rule
-    return rule.rule
+    posts = [  # fake array of posts
+        {
+            'author': {'nickname': 'John'},
+            'body': 'Beautiful day in Portland!'
+        },
+        {
+            'author': {'nickname': 'Susan'},
+            'body': 'The Avengers movie was so cool!'
+        }
+    ]
+    return render_template('index.html',
+                            title='nothome',
+                            posts=posts)
 
 r = praw.Reddit('OAuth testing example by u/Tech_Runmner ver 0.1')
 code = ''
@@ -47,6 +59,7 @@ def getSaved():
         print(thing)
     '''
 
+    #Checks the type of the object
     for thing in reddit_saves:
         if type(thing) == praw.objects.Submission:
             print('Submission')
