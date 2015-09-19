@@ -14,7 +14,7 @@ code = ''
 @app.route('/login')
 def login():
     r.set_oauth_app_info(client_id='R0RrAiBvmgk-3Q',
-                         client_secret='YPVjlyJoon9CsONiCU4TnJK8-Z8',
+                         client_secret='',
                          redirect_uri='http://127.0.0.1:5000/'
                                       'authorize_callback')
     url = r.get_authorize_url('uniqueKey', 'identity read save history', True)
@@ -32,7 +32,7 @@ def authorized():
 @app.route('/savedposts')
 def getSaved():
     reddit_saved_links = []
-    reddit_saves = r.user.get_saved(limit=1)
+    reddit_saves = r.user.get_saved(limit=2)
 
     #Add the reddit saved posts to list and print titles + points
     '''
@@ -46,6 +46,12 @@ def getSaved():
     for thing in links:
         print(thing)
     '''
+
+    for thing in reddit_saves:
+        if type(thing) == praw.objects.Submission:
+            print('Submission')
+        else:
+            print('not')
 
     '''
     #Prints the attributes of the object
