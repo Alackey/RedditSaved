@@ -1,5 +1,5 @@
 from app import app
-from flask import request, render_template
+from flask import request, render_template, jsonify
 from pprint import pprint
 import praw, webbrowser
 
@@ -7,14 +7,18 @@ import praw, webbrowser
 @app.route('/index')
 def index():
     rule = request.url_rule
-    posts = [  # fake array of posts
+    posts = [
         {
-            'author': {'nickname': 'John'},
-            'body': 'Beautiful day in Portland!'
+            'text': 'one',
+            'id': 1
         },
         {
-            'author': {'nickname': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
+            'text': 'two',
+            'id': 2
+        },
+        {
+            'text': 'three',
+            'id': 3
         }
     ]
     return render_template('index.html',
@@ -86,3 +90,7 @@ def getSaved():
     '''
 
     return 'done'
+
+@app.route('/change')
+def change():
+    return jsonify({'text': 'it has been changed'})

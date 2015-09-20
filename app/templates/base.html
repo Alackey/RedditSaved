@@ -24,6 +24,18 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script>
+    function change(sourceId, btnId) {
+        $(btnId).hide();
+        $.get('/change', {
+        }).done(function(changed) {
+            $(sourceId).text(changed['text'])
+        }).fail(function() {
+            $(btnid).show();
+        });
+    }
+</script>
+
 </head>
 
 <body>
