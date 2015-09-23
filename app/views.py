@@ -1,27 +1,29 @@
 from app import app
-from flask import request, render_template, jsonify
+from flask import request, render_template, jsonify, Response, json
 from pprint import pprint
 import praw, webbrowser
+
+posts = [
+            {
+                'text': 'one',
+                'id': 1
+            },
+            {
+                'text': 'two',
+                'id': 2
+            },
+            {
+                'text': 'three',
+                'id': 3
+            }
+        ]
 
 @app.route('/')
 @app.route('/index')
 def index():
     rule = request.url_rule
-    posts = [
-        {
-            'text': 'one',
-            'id': 1
-        },
-        {
-            'text': 'two',
-            'id': 2
-        },
-        {
-            'text': 'three',
-            'id': 3
-        }
-    ]
-    return render_template('index.html',
+
+    return render_template('base.html',
                             title='nothome',
                             posts=posts)
 
@@ -94,3 +96,43 @@ def getSaved():
 @app.route('/change')
 def change():
     return jsonify({'text': 'it has been changed'})
+
+@app.route('/home')
+def home():
+    posts = [
+                {
+                    'text': 'one',
+                    'id': 1
+                },
+                {
+                    'text': 'two',
+                    'id': 2
+                },
+                {
+                    'text': 'three',
+                    'id': 3
+                }
+            ]
+    return Response(json.dumps(posts),  mimetype='application/json')
+
+@app.route('/clear')
+def clear():
+    posts = [
+        {
+            'text': 'four',
+            'id': 4
+        },
+        {
+            'text': 'five',
+            'id': 5
+        },
+        {
+            'text': 'six',
+            'id': 6
+        },
+        {
+            'text': 'seven',
+            'id': 7
+        }
+    ]
+    return Response(json.dumps(posts),  mimetype='application/json')
