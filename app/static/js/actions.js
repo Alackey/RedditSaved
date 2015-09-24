@@ -1,14 +1,14 @@
 //Loads the homepage posts on page load
 function homeOnLoad(){
-    $.get('/home', {
+    $.get('/savedposts', {
     }).done(function(posts) {
         for(var i = 0; i < posts.length; i++){
             var div = document.createElement('div');
             div.id = 'posts';
             div.innerHTML = '<p>' + posts[i].text + '</p>';
-            $("#javascriptposts").append(div).hide().fadeIn(700);
+            $("#javascriptposts").hide().append(div).fadeIn(350);
         }
-    })
+    });
 }
 window.onload = homeOnLoad;
 
@@ -22,7 +22,7 @@ function change(sourceId, btnId) {
     });
 }
 
-function clear(postsId, setid, newid) {
+function clear(postsId) {
     $(postsId).empty();
     $.get('/clear', {
     }).done(function(changed) {
@@ -30,11 +30,8 @@ function clear(postsId, setid, newid) {
             var div = document.createElement('div');
             div.id = 'posts';
             div.innerHTML = '<p>' + changed[i].text + '</p>';
-            $("#javascriptposts").append(div).hide().fadeIn(700);
+            $("#javascriptposts").append(div).hide().fadeIn(100);
         }
-        /*for( var i = 0; i < changed.length; i++){
-            alert(changed[i].text);
-        }*/
     }).fail(function() {
         $(postsId).show();
     });

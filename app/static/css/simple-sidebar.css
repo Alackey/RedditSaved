@@ -96,7 +96,16 @@
     background: none;
 }
 
+#menu-toggle {
+    display: inline-block !important;
+}
+
 @media(min-width:768px) {
+
+    #menu-toggle {
+        display: none !important;
+    }
+
     #wrapper {
         padding-left: 250px;
     }
@@ -123,8 +132,9 @@
         margin-right: 0;
     }
 
-
 }
+
+
 
 #posts {
     margin: 3px;

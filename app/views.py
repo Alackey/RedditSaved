@@ -3,39 +3,23 @@ from flask import request, render_template, jsonify, Response, json
 from pprint import pprint
 import praw, webbrowser
 
-posts = [
-            {
-                'text': 'one',
-                'id': 1
-            },
-            {
-                'text': 'two',
-                'id': 2
-            },
-            {
-                'text': 'three',
-                'id': 3
-            }
-        ]
 
 @app.route('/')
 @app.route('/index')
 def index():
     rule = request.url_rule
-
+    #username =
     return render_template('base.html',
-                            title='nothome',
-                            posts=posts)
+                            title='nothome')
 
 r = praw.Reddit('OAuth testing example by u/Tech_Runmner ver 0.1')
 code = ''
 @app.route('/login')
 def login():
     r.set_oauth_app_info(client_id='R0RrAiBvmgk-3Q',
-                         client_secret='',
-                         redirect_uri='http://127.0.0.1:5000/'
-                                      'authorize_callback')
-    url = r.get_authorize_url('uniqueKey', 'identity read save history', True)
+                         client_secret='YPVjlyJoon9CsONiCU4TnJK8-Z8',
+                         redirect_uri='http://127.0.0.1:5000/authorize_callback')
+    url = r.get_authorize_url('uniqueKey', 'identity read save history identity', True)
     webbrowser.open(url, new=0)
     return "login"
 
@@ -50,7 +34,15 @@ def authorized():
 @app.route('/savedposts')
 def getSaved():
     reddit_saved_links = []
-    reddit_saves = r.user.get_saved(limit=2)
+    reddit_saves = r.user.get_saved(limit=5)
+
+    savedposts = list(reddit_saves)
+
+    for post in savedposts:
+        if type(post) == praw.objects.Submission:
+            reddit_saved_links.append({ 'text':  post.title  })
+        else:
+            reddit_saved_links.append({ 'text':  post.body })
 
     #Add the reddit saved posts to list and print titles + points
     '''
@@ -58,19 +50,22 @@ def getSaved():
     for reddit_save in reddit_saves:
         reddit_saved_links.append(reddit_save)
     for thing in reddit_saved_links:
-        print(thing)
+        print(type(thing))
+
     #Option 2
     links = list(reddit_saves)
     for thing in links:
-        print(thing)
+        print(type(thing))
     '''
 
+    '''
     #Checks the type of the object
     for thing in reddit_saves:
         if type(thing) == praw.objects.Submission:
             print('Submission')
         else:
             print('not')
+    '''
 
     '''
     #Prints the attributes of the object
@@ -91,7 +86,7 @@ def getSaved():
     pprint(list(reddit_saves))
     '''
 
-    return 'done'
+    return Response(json.dumps(reddit_saved_links),  mimetype='application/json')
 
 @app.route('/change')
 def change():
@@ -113,7 +108,8 @@ def home():
                     'id': 3
                 }
             ]
-    return Response(json.dumps(posts),  mimetype='application/json')
+    #return Response(json.dumps(posts),  mimetype='application/json')
+    return "/home"
 
 @app.route('/clear')
 def clear():
