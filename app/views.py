@@ -34,15 +34,24 @@ def authorized():
 @app.route('/savedposts')
 def getSaved():
     reddit_saved_links = []
-    reddit_saves = r.user.get_saved(limit=5)
+    reddit_saves = r.user.get_saved(limit=10)
 
     savedposts = list(reddit_saves)
 
     for post in savedposts:
         if type(post) == praw.objects.Submission:
-            reddit_saved_links.append({ 'text':  post.title  })
+            reddit_saved_links.append({ 'info': [
+                                        { 'type': 'Submission'},
+                                        { 'mainText': post.title },
+                                        { 'permalink': post.permalink }, #comments
+                                        { 'titleLink': post.url }
+                                      ]})
         else:
-            reddit_saved_links.append({ 'text':  post.body })
+            reddit_saved_links.append({ 'info': [
+                                        { 'type': 'Comment'},
+                                        { 'mainText': post.body },
+                                        { 'permalink': post.permalink }
+                                      ]})
 
     #Add the reddit saved posts to list and print titles + points
     '''

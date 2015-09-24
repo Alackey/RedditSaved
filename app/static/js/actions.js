@@ -5,7 +5,18 @@ function homeOnLoad(){
         for(var i = 0; i < posts.length; i++){
             var div = document.createElement('div');
             div.id = 'posts';
-            div.innerHTML = '<p>' + posts[i].text + '</p>';
+            if ( posts[i].info[0].type == 'Submission'){
+                div.innerHTML = '<a href="' + posts[i].info[3].titleLink + '"><h3>'
+                                + posts[i].info[1].mainText + '</h3></a>' +
+                                '<p>' + posts[i].info[0].type + '</p>' +
+                                '<a href="' + posts[i].info[2].permalink + '">Comments</a>' +
+                                '<a href="#">unsave</a>' ;
+            } else {
+                div.innerHTML = '<h4>' + posts[i].info[1].mainText + '</h4>' +
+                                '<p>' + posts[i].info[0].type + '</p>' +
+                                '<a href="' + posts[i].info[2].permalink + '">permalink</a>' +
+                                '<a href="#">unsave</a>';
+            }
             $("#javascriptposts").hide().append(div).fadeIn(350);
         }
     });
