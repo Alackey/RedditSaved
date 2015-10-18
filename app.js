@@ -16,21 +16,12 @@ mongoose.connection.on('connected', function () {
     console.log('hello');
 });
 
-var FormSchema = new mongoose.Schema({
+var GroupsSchema = new mongoose.Schema({
     name: String,
-    created: Date
-}, {collection: "form"});
+    posts: Array
+}, {collection: "groups"});
 
-//create model/collection
-var Form = mongoose.model("Form", FormSchema);
-
-var form1 = new Form({name: "Form 1", created: new Date()});
-
-form1.save();
-
-Form.find( function (err, result) {
-    console.log(result);
-});
+var Group = mongoose.model("Group", GroupsSchema);
 
 app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
@@ -114,43 +105,41 @@ app.get('/savedposts', function(req, res) {
                     //Post is a Submission
                     //console.log(posts.data.children[i].data.title);
                 }
-
             }
             //console.log(JSON.stringify(redditPosts, null, 4));
             console.log("about to send posts");
+            console.log(redditPosts);
+            Group.findOne({name: 'Home'}, function (err, data) {
+                console.log(data);
+                data.posts = redditPosts;
+                data.save();
+            });
             return res.json(redditPosts);
         });
     });
 });
 
-// app.get('/test', function(req, res) {
-//     console.log('1');
-//
-//     var chris = new User({
-//       name: 'Anthony',
-//       username: 'alackey',
-//       text: 'This worked!'
-//     });
-//
-//     console.log('2');
-//
-//     chris.save(function(err) {
-//       if (err) throw err;
-//
-//       console.log('User saved successfully!');
-//     });
-//
-//     User.find({ username: 'alackey' }, function(err, user) {
-//       if (err) throw err;
-//
-//       // object of the user
-//       console.log(user);
-//       return 'hello';
-//     });
-//
-//     return 'did it work';
-//
-// });
+app.get('/groups', function(req, res) {
+    var groups;
+
+    newPosts = [ { "type" : "Submission", "mainText" : "the new title", "permalink" : "new link" } ];
+
+    // Group.findOne({name: 'Home'}, function (err, data) {
+    //     console.log(data);
+    //     data.posts = newPosts;
+    //     data.save();
+    // });
+
+    // Group.find({name: 'Home'},  function(err, data){
+    //     console.log(data[0].posts[0].type);
+    //     data[0].posts = newPosts;
+    //     data.save();
+    //     console.log(data);
+    //     groups = data;
+    // });
+
+    return res.json(groups);
+});
 
 // does not account for hitting "deny" / etc. Assumes that
 // the user has pressed "allow"

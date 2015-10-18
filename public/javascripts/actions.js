@@ -1,7 +1,9 @@
 //Loads the homepage posts on page load
+var homePosts;
 function homeOnLoad(){
     $.get('/savedposts', {
     }).done(function(posts) {
+        homePosts = posts;
         console.log("homeOnLoad started");
         console.log(posts);
         console.log(posts[3].info[2].permalink);
@@ -9,13 +11,15 @@ function homeOnLoad(){
             var div = document.createElement('div');
             div.id = 'posts';
             if ( posts[i].info[0].type == 'Submission'){
-                div.innerHTML = '<a href="' + posts[i].info[3].titleLink + '"><h3>'
+                div.innerHTML = '<input type="checkbox" name="selection" value="selected" class="selection">' +
+                                '<a href="' + posts[i].info[3].titleLink + '"><h3 class="inline">'
                                 + posts[i].info[1].mainText + '</h3></a>' +
                                 '<p>' + posts[i].info[0].type + '</p>' +
                                 '<a href="' + posts[i].info[2].permalink + '">Comments</a>' +
                                 '<a href="#">unsave</a>' ;
             } else {
-                div.innerHTML = '<h4>' + posts[i].info[1].mainText + '</h4>' +
+                div.innerHTML = '<input type="checkbox" name="selection" value="selected" class="selection">' +
+                                '<h4 class="inline">' + posts[i].info[1].mainText + '</h4>' +
                                 '<p>' + posts[i].info[0].type + '</p>' +
                                 '<a href="' + posts[i].info[2].permalink + '">permalink</a>' +
                                 '<a href="#">unsave</a>';
@@ -25,7 +29,33 @@ function homeOnLoad(){
         console.log("homeOnLoad finished");
     });
 }
-window.onload = homeOnLoad;
+
+function loadGroups() {
+    console.log(homePosts);
+    $.get('/groups?name=timing', {
+    }).done(function(groups) {  //Returns empty array
+        /*console.log('get /groups done');
+        console.log(groups);
+        for (var i = 0; i < groups.length; i++) {
+            var div = document.createElement('div');
+            div.class = 'group';
+            div.innerHTML = '<p>' + groups[i].name + '</p>';
+            console.log(div);
+            $('#groupSection').append(div);
+        }
+        */
+    });
+}
+
+window.onload = function() {
+    homeOnLoad();
+    loadGroups();
+};
+
+function changeGroup(allPostsID) {
+    $(allPostsID).empty();
+
+}
 
 function change(sourceId, btnId) {
     $(btnId).hide();

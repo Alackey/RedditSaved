@@ -147,6 +147,14 @@
     height: 50px;
 }
 
+.selection {
+    display: inline;
+}
+
+.inline {
+    display: inline;
+}
+
 #posts {
     margin: 3px;
     padding: 3px;
@@ -159,4 +167,8 @@
     border: 0px;
     padding: 0px;
     height: 50%;
+}
+
+.group {
+    
 }

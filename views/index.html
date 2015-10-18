@@ -41,12 +41,12 @@
                         Reddit Saved
                     </a>
                 </li>
-                <li>
-                    <a href="#">Home</a>
-                </li>
-                <li>
-                    <a href="#"> + Add Tab</a>
-                </li>
+                <div id="groupSection">
+                    <p class="group" id="Home"><a href="javascript:
+                        changeGroup('#javascriptposts');">Home</a></p>
+                    <p class="group" id="Getbackto"><a href="javascript:
+                        changeGroup('#javascriptposts');">Get back to</a></p>
+                </div>
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -58,17 +58,18 @@
                     <div id="searchbar">
                         Search
                     </div>
-                    <div class="dropdown">
-                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Dropdown
-                        <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li><a href="#">Separated link</a></li>
-                      </ul>
+                    <div id="saveToGroup">
+                        <select name="limits" id="dropdown">
+                          <option value="10">10</option>
+                          <option value="20">20</option>
+                          <option value="30">30</option>
+                        </select>
+                        <input type="button" onclick="" value="Go to Google" />
+                        <form action="demo_form.asp">
+                          <input type="checkbox" name="vehicle" value="Bike"> I have a bike<br>
+                          <input type="checkbox" name="vehicle" value="Car" checked> I have a car<br>
+                          <input type="submit" value="Submit">
+                        </form>
                     </div>
                     <select name="limits" id="dropdown">
                       <option value="10">10</option>
