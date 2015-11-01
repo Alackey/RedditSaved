@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Simple Sidebar - Start Bootstrap Template</title>
+    <title>Reddit Saved App</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -41,12 +41,18 @@
                         Reddit Saved
                     </a>
                 </li>
-                <div id="groupSection">
+                <li><p class="group" id="Home"><a href="javascript:
+                    changeGroup('#javascriptposts');">Home</a></p>
+                </li>
+                <li><p class="group" id="Getbackto"><a href="javascript:
+                    changeGroup('#javascriptposts');">Get back to</a></p>
+                </li>
+                <!-- <div id="groupSection">
                     <p class="group" id="Home"><a href="javascript:
                         changeGroup('#javascriptposts');">Home</a></p>
                     <p class="group" id="Getbackto"><a href="javascript:
                         changeGroup('#javascriptposts');">Get back to</a></p>
-                </div>
+                </div> -->
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
@@ -55,8 +61,11 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div id="searchbar">
-                        Search
+                    <div id="search">
+                        <div id="searchbar">
+                            Search
+                        </div>
+                        <input type="button" onclick="" value="Search" id="SearchButton"/>
                     </div>
                     <div id="saveToGroup">
                         <select name="limits" id="dropdown">
@@ -65,11 +74,11 @@
                           <option value="30">30</option>
                         </select>
                         <input type="button" onclick="" value="Go to Google" />
-                        <form action="demo_form.asp">
+                        <!--<form action="demo_form.asp">
                           <input type="checkbox" name="vehicle" value="Bike"> I have a bike<br>
                           <input type="checkbox" name="vehicle" value="Car" checked> I have a car<br>
                           <input type="submit" value="Submit">
-                        </form>
+                      </form>-->
                     </div>
                     <select name="limits" id="dropdown">
                       <option value="10">10</option>
@@ -90,7 +99,6 @@
                     <div class="col-lg-12">
                         <a href="#menu-toggle" class="btn btn-default"
                             id="menu-toggle">Toggle Menu</a>
-                        hello
                         <div id="allposts">
                             <span id="clearbtn"><a href="javascript:
                                 clear('#javascriptposts');">clear them</a>

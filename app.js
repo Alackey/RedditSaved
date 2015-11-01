@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-//var appDB = express();
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 var Snoocore = require('snoocore');
@@ -62,8 +61,15 @@ app.get('/', function (req, res) {
         return res.redirect('/me');
     }
 
+    //var reddit = getInstance();
+    //return res.send('<a href="' + reddit.getAuthUrl() + '">Authenticate!</a>');
+
+    return res.render('home.html');
+});
+
+app.get('/authURL', function (req, res) {
     var reddit = getInstance();
-    return res.send('<a href="' + reddit.getAuthUrl() + '">Authenticate!</a>');
+    return res.send('<a href="' + reddit.getAuthUrl() + '">Sign in</a>');
 });
 
 app.get('/me', function(req, res) {
@@ -75,7 +81,7 @@ app.get('/me', function(req, res) {
         return res.redirect('/');
     }
 
-    return res.render('index.html')
+    return res.render('index.html');
 });
 
 app.get('/savedposts', function(req, res) {

@@ -12,17 +12,15 @@ function homeOnLoad(){
             div.id = 'posts';
             if ( posts[i].info[0].type == 'Submission'){
                 div.innerHTML = '<input type="checkbox" name="selection" value="selected" class="selection">' +
-                                '<a href="' + posts[i].info[3].titleLink + '"><h3 class="inline">'
-                                + posts[i].info[1].mainText + '</h3></a>' +
-                                '<p>' + posts[i].info[0].type + '</p>' +
+                                '<h3 class="inline"><a href="' + posts[i].info[3].titleLink + '">'
+                                + posts[i].info[1].mainText + '</a></h3><hr class="line">' +
                                 '<a href="' + posts[i].info[2].permalink + '">Comments</a>' +
-                                '<a href="#">unsave</a>' ;
+                                '<a href="#" class="unsave">Unsave</a>' ;
             } else {
                 div.innerHTML = '<input type="checkbox" name="selection" value="selected" class="selection">' +
-                                '<h4 class="inline">' + posts[i].info[1].mainText + '</h4>' +
-                                '<p>' + posts[i].info[0].type + '</p>' +
-                                '<a href="' + posts[i].info[2].permalink + '">permalink</a>' +
-                                '<a href="#">unsave</a>';
+                                '<h4 class="inline">' + posts[i].info[1].mainText + '</h4><hr class="line">' +
+                                '<a href="' + posts[i].info[2].permalink + '">Permalink</a>' +
+                                '<a href="#" class="unsave">Unsave</a>';
             }
             $("#javascriptposts").hide().append(div).fadeIn(350);
         }
