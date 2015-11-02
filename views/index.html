@@ -12,6 +12,9 @@
 
     <title>Reddit Saved App</title>
 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
     <!-- Bootstrap Core CSS -->
     <link href="stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
 
@@ -113,9 +116,6 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- jQuery -->
-    <script src="javascripts/jquery.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
     <script src="javascripts/bootstrap.min.js"></script>
 
@@ -124,6 +124,10 @@
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
+    });
+    $('#javascriptposts').on('click', '.unsave', function (){
+        var fullname = $(this).siblings('.fullname').text();
+        unsave(fullname);
     });
     </script>
 

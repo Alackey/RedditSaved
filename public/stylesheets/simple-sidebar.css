@@ -188,3 +188,7 @@
 .unsave {
     margin-left: 5px;
 }
+
+.fullname {
+    float: right;
+}

@@ -4,9 +4,6 @@ function homeOnLoad(){
     $.get('/savedposts', {
     }).done(function(posts) {
         homePosts = posts;
-        console.log("homeOnLoad started");
-        console.log(posts);
-        console.log(posts[3].info[2].permalink);
         for(var i = 0; i < posts.length; i++){
             var div = document.createElement('div');
             div.id = 'posts';
@@ -15,16 +12,17 @@ function homeOnLoad(){
                                 '<h3 class="inline"><a href="' + posts[i].info[3].titleLink + '">'
                                 + posts[i].info[1].mainText + '</a></h3><hr class="line">' +
                                 '<a href="' + posts[i].info[2].permalink + '">Comments</a>' +
-                                '<a href="#" class="unsave">Unsave</a>' ;
+                                '<a  class="unsave">Unsave</a>' +
+                                '<span class="fullname">' + posts[i].info[4].fullname + '</span>';
             } else {
                 div.innerHTML = '<input type="checkbox" name="selection" value="selected" class="selection">' +
                                 '<h4 class="inline">' + posts[i].info[1].mainText + '</h4><hr class="line">' +
                                 '<a href="' + posts[i].info[2].permalink + '">Permalink</a>' +
-                                '<a href="#" class="unsave">Unsave</a>';
+                                '<a class="unsave">Unsave</a>' +
+                                '<span class="fullname">' + posts[i].info[3].fullname + '</span>';
             }
             $("#javascriptposts").hide().append(div).fadeIn(350);
         }
-        console.log("homeOnLoad finished");
     });
 }
 
@@ -68,6 +66,11 @@ function change(sourceId, btnId) {
 function clear(postsId) {
     $(postsId).empty();
     $.get('/clear', {
+    }).done(function(data) {
+
+    });
+
+    /*$.get('/clear', {
     }).done(function(changed) {
         for(var i = 0; i < changed.length; i++){
             var div = document.createElement('div');
@@ -77,5 +80,12 @@ function clear(postsId) {
         }
     }).fail(function() {
         $(postsId).show();
+    });*/
+}
+
+function unsave(id) {
+    $.get('/unsave', { fullname: id}
+    ).done(function(data){
+        console.log(data);
     });
 }

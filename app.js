@@ -3,6 +3,7 @@ var app = express();
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 var Snoocore = require('snoocore');
+var url = require('url');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/RedditSaved');
@@ -91,13 +92,19 @@ app.get('/savedposts', function(req, res) {
             var redditPosts = [];
             console.log(posts.data.children[0].data.id);
             for( var i = 0; i < posts.data.children.length; i++){
+                //test
+                if (i==0) {
+                    console.log(posts.data.children[0].data);
+                }
+
                 if (posts.data.children[i].data.body != undefined) {
                     redditPosts.push({ 'info': [
                                         { 'type': 'Comment'},
                                         { 'mainText': posts.data.children[i].data.body },
                                         { 'permalink': "http://www.reddit.com/comments/" +
                                             posts.data.children[i].data.link_id.split("_")[1] +
-                                            "/x/" + posts.data.children[i].data.id}
+                                            "/x/" + posts.data.children[i].data.id},
+                                        { 'fullname': posts.data.children[i].data.name}
                                     ]});
                     //Post is a Comment
                     //console.log(posts.data.children[i].data.body);
@@ -106,7 +113,8 @@ app.get('/savedposts', function(req, res) {
                                         { 'type': 'Submission'},
                                         { 'mainText': posts.data.children[i].data.title },
                                         { 'permalink': "http://www.reddit.com" + posts.data.children[i].data.permalink},
-                                        { 'titleLink': posts.data.children[i].data.url}
+                                        { 'titleLink': posts.data.children[i].data.url},
+                                        { 'fullname': posts.data.children[i].data.name}
                                     ]});
                     //Post is a Submission
                     //console.log(posts.data.children[i].data.title);
@@ -145,6 +153,20 @@ app.get('/groups', function(req, res) {
     // });
 
     return res.json(groups);
+});
+
+app.get('/clear', function(req, res) {
+    console.log("clear started");
+    Group.find({name: "Home"}, function(err, info) {
+        console.log(info);
+    });
+});
+
+app.get('/unsave', function(req, res) {
+    var fullname = url.parse(req.url, true).query.fullname;
+    accounts[req.cookies.account_id]('/api/unsave').post({
+        id: fullname
+    });
 });
 
 // does not account for hitting "deny" / etc. Assumes that

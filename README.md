@@ -1,2 +1,2 @@
 # RedditSaved
-A website to managed saved posts and comments from reddit
+A website to manage saved posts and comments from Reddit
