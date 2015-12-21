@@ -4,7 +4,7 @@
 }
 
 #main {
-    background-image: url(../images/stardust.png);
+    background-image: url('../images/stardust.png');
     position: relative;
     height: 100vh;
     text-align: center;

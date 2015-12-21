@@ -8,20 +8,23 @@ function homeOnLoad(){
             var div = document.createElement('div');
             div.id = 'posts';
             if ( posts[i].info[0].type == 'Submission'){
-                div.innerHTML = '<input type="checkbox" name="selection" value="selected" class="selection">' +
+                div.innerHTML = '<span class="type" style="display:block">' + posts[i].info[0].type + '</span>' +
+                                '<input type="checkbox" name="selection" value="selected" class="selection">' +
                                 '<h3 class="inline"><a href="' + posts[i].info[3].titleLink + '">'
                                 + posts[i].info[1].mainText + '</a></h3><hr class="line">' +
                                 '<a href="' + posts[i].info[2].permalink + '">Comments</a>' +
                                 '<a  class="unsave">Unsave</a>' +
                                 '<span class="fullname">' + posts[i].info[4].fullname + '</span>';
             } else {
-                div.innerHTML = '<input type="checkbox" name="selection" value="selected" class="selection">' +
+                div.innerHTML = '<span class="type" style="display:block">' + posts[i].info[0].type + '</span>' +
+                                '<input type="checkbox" name="selection" value="selected" class="selection">' +
                                 '<h4 class="inline">' + posts[i].info[1].mainText + '</h4><hr class="line">' +
                                 '<a href="' + posts[i].info[2].permalink + '">Permalink</a>' +
                                 '<a class="unsave">Unsave</a>' +
                                 '<span class="fullname">' + posts[i].info[3].fullname + '</span>';
             }
             $("#javascriptposts").hide().append(div).fadeIn(350);
+            //$('.fullname').hide();        For production
         }
     });
 }
@@ -33,6 +36,7 @@ function loadGroups() {
         /*console.log('get /groups done');
         console.log(groups);
         for (var i = 0; i < groups.length; i++) {
+
             var div = document.createElement('div');
             div.class = 'group';
             div.innerHTML = '<p>' + groups[i].name + '</p>';
@@ -50,7 +54,14 @@ window.onload = function() {
 
 function changeGroup(allPostsID) {
     $(allPostsID).empty();
-
+    console.log("Changing");
+    $.get('/groups', {
+        groupName: 'Get back to'
+    }).done(function(callback) {
+        console.log("Done");
+        $(allPostsID).text(JSON.stringify(callback));
+        console.log(JSON.stringify(callback));
+    });
 }
 
 function change(sourceId, btnId) {
@@ -84,8 +95,12 @@ function clear(postsId) {
 }
 
 function unsave(id) {
-    $.get('/unsave', { fullname: id}
+    console.log(id);
+    /*$.get('/unsave', { fullname: id}
     ).done(function(data){
         console.log(data);
-    });
+    });*/
 }
+
+
+

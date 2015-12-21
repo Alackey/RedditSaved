@@ -5,28 +5,36 @@ app.use(cookieParser());
 var Snoocore = require('snoocore');
 var url = require('url');
 
+//Use HTML
+app.use(express.static(__dirname + '/public'));
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
+//Mongoose/MongoDB
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/RedditSaved');
-console.log(mongoose.connection.host);
-console.log(mongoose.connection.port);
-console.log(mongoose.connection.collections);
 
-//Check to see if connected
 mongoose.connection.on('connected', function () {
-    console.log('hello');
+    console.log('Mongoose connected');
 });
 
+//Group Schema
 var GroupsSchema = new mongoose.Schema({
-    name: String,
+    username: String,
     posts: Array
 }, {collection: "groups"});
 
 var Group = mongoose.model("Group", GroupsSchema);
 
-app.use(express.static(__dirname + '/public'));
-app.set('views', __dirname + '/views');
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
+//User Schema
+var UserSchema = new mongoose.Schema({
+    username: String,
+    groups: Array
+}, {collection: "users"});
+
+var User = mongoose.model("User", UserSchema);
+
 
 var uniqId = 0; // unique id for our user
 var accounts = {}; // Snoocore instances. Each instance is a different account
@@ -65,12 +73,12 @@ app.get('/', function (req, res) {
     //var reddit = getInstance();
     //return res.send('<a href="' + reddit.getAuthUrl() + '">Authenticate!</a>');
 
-    return res.render('home.html');
+    res.render('home.html');
 });
 
 app.get('/authURL', function (req, res) {
     var reddit = getInstance();
-    return res.send('<a href="' + reddit.getAuthUrl() + '">Sign in</a>');
+    res.send('<a href="' + reddit.getAuthUrl() + '">Sign in</a>');
 });
 
 app.get('/me', function(req, res) {
@@ -79,7 +87,7 @@ app.get('/me', function(req, res) {
 
     // If the user has not authenticated bump them back to the main route
     if (!accountId) {
-        return res.redirect('/');
+        res.redirect('/');
     }
 
     return res.render('index.html');
@@ -87,6 +95,7 @@ app.get('/me', function(req, res) {
 
 app.get('/savedposts', function(req, res) {
     return accounts[req.cookies.account_id]('/api/v1/me').get().then(function(result) {
+        console.log(result.name);
         //Get saved posts
         accounts[req.cookies.account_id]('/user/' + result.name + '/saved').get().then(function(posts) {
             var redditPosts = [];
@@ -122,37 +131,35 @@ app.get('/savedposts', function(req, res) {
             }
             //console.log(JSON.stringify(redditPosts, null, 4));
             console.log("about to send posts");
-            console.log(redditPosts);
-            Group.findOne({name: 'Home'}, function (err, data) {
-                console.log(data);
-                data.posts = redditPosts;
-                data.save();
-            });
-            return res.json(redditPosts);
+            //console.log(redditPosts);
+
+            res.json(redditPosts);
         });
     });
 });
 
 app.get('/groups', function(req, res) {
-    var groups;
+    var groupName = url.parse(req.url, true).query.groupName;
 
-    newPosts = [ { "type" : "Submission", "mainText" : "the new title", "permalink" : "new link" } ];
+    //Finds Group 
+    function retrieveGroup(groupName, callback) {
+        User.find(
+            {username: 'Tech_Runner'},
+            {groups: {$elemMatch: {Group_Name: "Get back to"}}}
+        , function(err, data) {
+            console.log('Initial group print:');
+            console.log(JSON.stringify(data));
+            callback(null, data);
+        });
+    }
+    
+    retrieveGroup(groupName, function(err, groupData) {
+        console.log('printing the the group from the method: ');
+        console.log(JSON.stringify(groupData));
+        res.send(groupData);
+    });
 
-    // Group.findOne({name: 'Home'}, function (err, data) {
-    //     console.log(data);
-    //     data.posts = newPosts;
-    //     data.save();
-    // });
-
-    // Group.find({name: 'Home'},  function(err, data){
-    //     console.log(data[0].posts[0].type);
-    //     data[0].posts = newPosts;
-    //     data.save();
-    //     console.log(data);
-    //     groups = data;
-    // });
-
-    return res.json(groups);
+    //return res.json(group);
 });
 
 app.get('/clear', function(req, res) {
@@ -192,7 +199,7 @@ app.get('/reddit_redirect', function(req, res) {
         res.cookie('account_id', String(accountId), { maxAge: 900000, httpOnly: true });
 
         // redirect to the authenticated route
-        return res.redirect('/me');
+        res.redirect('/me');
     });
 
 });
@@ -200,3 +207,8 @@ app.get('/reddit_redirect', function(req, res) {
 var server = app.listen(3000, function () {
   console.log('Example app listening at http://localhost:3000');
 });
+
+
+/*MongoDB Test Data
+db.users.insert({ username: "Tech_Runner", groups: [{ Group_Name: "Home", "posts": [{}]},{ Group_Name: "Get back to", posts: [{ type: "Submission", mainText: "My high school battle-station.",permalink : "http://www.reddit.com/r/battlestations/comments/385n2b/my_high_school_battlestation/", titleLink: "http://imgur.com/a/LRcxo", fullname: "t3_385n2b"}]}]})
+*/

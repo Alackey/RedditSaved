@@ -47,7 +47,7 @@
                 <li><p class="group" id="Home"><a href="javascript:
                     changeGroup('#javascriptposts');">Home</a></p>
                 </li>
-                <li><p class="group" id="Getbackto"><a href="javascript:
+                <li><p class="group" id="Get back to"><a href="javascript:
                     changeGroup('#javascriptposts');">Get back to</a></p>
                 </li>
                 <!-- <div id="groupSection">
@@ -119,15 +119,24 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="javascripts/bootstrap.min.js"></script>
 
-    <!-- Menu Toggle Script -->
+    
     <script>
+    //Menu Toggle 
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
+
+    //unsave
     $('#javascriptposts').on('click', '.unsave', function (){
         var fullname = $(this).siblings('.fullname').text();
         unsave(fullname);
+    });
+
+    //Change Groups
+    $('.sidebar-nav').on('click', '.group', function (){
+        var id = $(this).attr('id');
+        console.log(id);
     });
     </script>
 
