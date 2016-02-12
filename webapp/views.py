@@ -15,12 +15,17 @@ def home(request):
     return render(
         request,
         'webapp/home.html',
-        {'authURL': r.get_authorize_url('uniqueKey', 'identity', True)}
+        {'authURL': r.get_authorize_url(
+                'uniqueKey',
+                'identity read history save',
+                True)}
     )
 
 
 def dashboard(request):
-    return render(request, 'webapp/dashboard.html')
+    savedPosts = list(r.user.get_saved())
+    print(savedPosts[0].title)
+    return render(request, 'webapp/posts.html', {'savedPosts': savedPosts})
 
 
 def callback(request):

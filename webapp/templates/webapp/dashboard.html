@@ -1,10 +1,34 @@
+{% load staticfiles %}
 <html>
 <head>
     <title>Reddit Saved</title>
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <p> posts</p>
-    <p>{{ code }}</p>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Reddit Saved
+                    </a>
+                </li>
+                <li><p class="group" id="Home"><a href="">Home</a></p>
+                </li>
+                <li><p class="group" id="Getbackto"><a href="">Get back to</a></p>
+                </li>
+                
+            </ul>
+        </div>
+        <div class="container-fluid content">
+            <div class="row">
+            search order unsave all
+            </div>
+            {% block posts %}
+            {% endblock %}
+        </div>
+    </div>
 </body>
 </html>

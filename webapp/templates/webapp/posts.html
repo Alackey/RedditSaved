@@ -1,0 +1,11 @@
+{% extends 'webapp/dashboard.html' %}
+
+{% block posts %}
+<div class="posts-container">
+    <h1>Dashboard</h1>
+    <p> posts</p>
+    {% for post in savedPosts %}
+        <p>{{ post.title }}</p>
+    {% endfor %}
+</div>
+{% endblock %}
