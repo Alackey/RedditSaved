@@ -1,3 +1,7 @@
 .posts-container {
     background-color: yellow;
 }
+
+.inline {
+    display: inline;
+}

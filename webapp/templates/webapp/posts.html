@@ -5,13 +5,25 @@
     <h1>Dashboard</h1>
     <p> posts</p>
     {% for post in savedPosts %}
-        {% if post.body %}
-        
-        {% else %}
-        <input type="checkbox" name="selection" value="selected" class="selection">
-        <p>{{ post.title }}</p>
+
+        {% if post.body %} <!-- Comment -->
+            {% with postLink=post.link_url id=post.id %}
+                <input type="checkbox" name="selection" value="selected" class="selection">
+                <h4 class="inline">{{ post.body }}</h4>
+                <a href="{{ postLink }}{{ id }}">Comments</a>
+                <a href="">Unsave</a>
+                <span>{{ post.name }}</span>
+            {% endwith %}
+            
+        {% else %} <!-- Submission -->
+            <input type="checkbox" name="selection" value="selected" class="selection">
+            <h3 class="inline"><a href="{{ post.url }}">{{ post.title }}</a></h3>
+            <a href="{{ post.permalink }}">Comments</a>
+            <a href="">Unsave</a>
+            <span>{{ post.name }}</span>
         {% endif %}
-        
+
+        <hr>
     {% endfor %}
 </div>
 {% endblock %}
