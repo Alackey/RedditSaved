@@ -23,8 +23,10 @@ def home(request):
 
 
 def dashboard(request):
-    savedPosts = list(r.user.get_saved())
-    print(savedPosts[0].title)
+    try:
+        savedPosts = list(r.user.get_saved())
+    except:
+        return redirect('/')
     return render(request, 'webapp/posts.html', {'savedPosts': savedPosts})
 
 
@@ -42,5 +44,6 @@ def callback(request):
 
 def authorize(code):
     access_information = r.get_access_information(code)
+    r.refresh_access_information(access_information['refresh_token'])
     user = r.get_me()
     print(user.name, user.link_karma)

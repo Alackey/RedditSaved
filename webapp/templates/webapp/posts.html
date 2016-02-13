@@ -5,7 +5,13 @@
     <h1>Dashboard</h1>
     <p> posts</p>
     {% for post in savedPosts %}
+        {% if post.body %}
+        
+        {% else %}
+        <input type="checkbox" name="selection" value="selected" class="selection">
         <p>{{ post.title }}</p>
+        {% endif %}
+        
     {% endfor %}
 </div>
 {% endblock %}
