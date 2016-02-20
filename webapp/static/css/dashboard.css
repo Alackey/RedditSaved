@@ -1,7 +1,11 @@
 .posts-container {
-    background-color: yellow;
+    background-color: gray;
 }
 
 .inline {
     display: inline;
+}
+
+.options {
+    display: block
 }
