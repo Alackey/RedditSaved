@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.core import serializers
+from .models import Group
 import requests
 import time
 import praw
@@ -38,24 +40,17 @@ def dashboard(request):
     return render(request, 'webapp/posts.html', {'savedPosts': savedPosts})
 
 
+def groups(request):
+    response = {}
+    response = serializers.serialize(
+        "json",
+        Group.objects.filter(username="Tech_Runner")
+    )
+    print(response)
+    return HttpResponse(response, content_type="application/json")
+
+
 def unsave(request):
-    # data = {'id': request.GET['id'],
-    #         'executed': 'unsaved'}
-    # url = r.config['unsave']
-    # response = r.request_json(url, data=data)
-    # r.evict(r.config['saved'])
-    # api_url = build_url('api/unsave/', {'id': id})
-    # response = r.get_content(api_url, _use_oauth=True)
-    # r.get_content(url, params=data, _use_oauth=True)
-    # print('start loop')
-    # for post in savedPosts:
-    #     print('if statement')
-    #     if post.id == request.GET['id']:
-    #         print('start unsave')
-    #         post.unsave()
-    #         print('done unsave')
-    #         break
-    # if request.GET['type'] == "comment":
     start = time.time()
     submission = r.get_submission(request.GET['postLink'])
     comments = list(submission.comments)
