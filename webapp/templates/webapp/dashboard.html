@@ -4,28 +4,38 @@
     <title>Reddit Saved</title>
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 </head>
 <body>
     <div id="wrapper">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
-                <!-- <li class="sidebar-brand">
-                    <a href="#">
-                        Reddit Saved
-                    </a>
-                </li>
-                <li>
-                    <p class="group" id="Home"><a href="">Home</a></p>
-                </li>
-                <li>
-                    <p class="group" id="AddGroup"><a href="">+ Add Group</a></p>
-                </li> -->
-                
             </ul>
         </div>
-        <div class="container-fluid content">
-            <div class="row">
+        <!-- End Sidebar -->
+       <!--  <a href="" class="btn btn-info btn-lg add-checked" role="button">Sign In</a> -->
+        <!-- <div class="btn-group add-checked">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Add Checked To...
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+            </ul>
+        </div> -->
+        <div class="dropdown" style="float:right;">
+            <button class="dropbtn">Add Checked To...</button>
+            <div class="dropdown-content">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="options">
             search order unsave all
             </div>
             {% block posts %}
@@ -33,9 +43,10 @@
         </div>
     </div>
 
+<script src="{% static 'javascript/dashboard.js'%}"></script>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src="{% static 'javascript/dashboard.js'%}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 </body>
 
 </html>
