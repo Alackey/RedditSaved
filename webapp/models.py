@@ -7,9 +7,9 @@ class Group(models.Model):
     groupname = models.CharField(max_length=50)
     posts = JSONField(blank=True, null=True)
     # posts = ArrayField(
-    #     JSONField(),
-    #     size=50,
-    #     default=[]
+    #     JSONField(blank=True, null=True),
+    #     blank=True,
+    #     null=True
     # )
 
     def __str__(self):

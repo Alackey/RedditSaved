@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from .models import Group
+import json
 import requests
 import time
 import praw
@@ -50,7 +51,19 @@ def groups(request):
     return HttpResponse(response, content_type="application/json")
 
 
+def group(request, group_name):
+    print("hello: ", group_name)
+
+    response = serializers.serialize(
+        "json",
+        Group.objects.filter(username="Tech_Runner", groupname=group_name)
+    )
+
+    return HttpResponse(response, content_type="application/json")
+
+
 def unsave(request):
+
     start = time.time()
     submission = r.get_submission(request.GET['postLink'])
     comments = list(submission.comments)
@@ -60,6 +73,7 @@ def unsave(request):
     comments = list(submission.comments)
     done = time.time()
     print(done - start)
+
     return HttpResponse("return this string")
 
 

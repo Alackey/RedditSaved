@@ -1,5 +1,6 @@
 .posts-container {
     background-color: E8E8E8;
+    padding: 5px;
 }
 
 .posts-container a {
@@ -9,6 +10,7 @@
 
 .inline {
     display: inline;
+    margin-bottom: 3px;
 }
 
 .post-options {
