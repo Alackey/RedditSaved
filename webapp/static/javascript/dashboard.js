@@ -1,6 +1,5 @@
 window.onload = function() {
     loadGroups();
-
 };
 
 function loadGroups() {
@@ -10,7 +9,8 @@ function loadGroups() {
         dataType: "json"
     }).done(function( groups ) {
         displayGroups(groups);
-        for ( var group of groups) {
+        displayDropdownMenu(groups);
+        for (var group of groups) {
             console.log("Group: " + JSON.stringify(group.fields));
         }
         console.log("groups loaded");
@@ -40,9 +40,22 @@ function displayGroups(groups) {
         console.log(result);
         return result;
     });
-
-
 }
+
+function displayDropdownMenu(groups) {
+    $(".dropdown-content").html(function() {
+        var resultHTML = "";
+
+        for (var group of groups) {
+            group_name = group.fields.groupname;
+            resultHTML +=
+                '<a href="#">' + group_name + '</a>';
+        }
+
+        return resultHTML;
+    });
+}
+
 $(document).ready(function() {
 
     $(document.body).on("click", ".group", function (data) {
