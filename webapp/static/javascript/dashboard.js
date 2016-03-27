@@ -13,7 +13,6 @@ function loadGroups() {
         for (var group of groups) {
             console.log("Group: " + JSON.stringify(group.fields));
         }
-        console.log("groups loaded");
     });
 }
 
@@ -37,7 +36,7 @@ function displayGroups(groups) {
             "<li> \
                 <p id='AddGroup'><a class='group' href=''>+ Add Group</a></p> \
             </li>";
-        console.log(result);
+
         return result;
     });
 }
@@ -49,9 +48,8 @@ function displayDropdownMenu(groups) {
         for (var group of groups) {
             group_name = group.fields.groupname;
             resultHTML +=
-                '<a href="#">' + group_name + '</a>';
+                '<a class="addTo">' + group_name + '</a>';
         }
-
         return resultHTML;
     });
 }
@@ -76,10 +74,6 @@ $(document).ready(function() {
                 alert("nooooooooooooo");
             },
         });
-        // $.get("/group/" + data.toElement.innerText + "/",
-        // function(data,status) {
-        //     alert("done");
-        // });
     });
 });
 
@@ -87,8 +81,6 @@ function displayPosts(posts) {
     var postsHTML = "";
 
     for (var post of posts) {
-        console.log(post);
-
         if(post.body) {
             postsHTML += constructComment(post);
             console.log("%cBody Exits", 'background:  yellow;');
@@ -96,7 +88,6 @@ function displayPosts(posts) {
             postsHTML += constructSubmission(post);
         }
     }
-
     $(".posts-container").html(postsHTML);
 }
 
