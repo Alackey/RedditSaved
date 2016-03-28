@@ -29,7 +29,7 @@ function displayGroups(groups) {
             group_name = group.fields.groupname;
             result +=
                 "<li> \
-                    <p  id='" + group_name + "'><a class='group' >" + group_name + "</a></p> \
+                    <p id='" + group_name + "'><a class='group'>" + group_name + "</a></p> \
                 </li>";
         }
         result +=
@@ -67,7 +67,6 @@ $(document).ready(function() {
                 clearPosts();
                 displayPosts(data[0].fields.posts.data);
                 console.log("data: " + JSON.stringify(data[0].fields.posts.data));
-                alert("done");
             },
             error: function(data) {
                 console.log(data);
@@ -98,13 +97,23 @@ $(document).ready(function() {
             method: "GET",
             url: "/group/add/?group_name=" + group_name,
             datatype: "json",
-            success: function(data) {
-                alert("added group");
-            },
             error: function(data) {
                 alert("Error: Could not add group.");
+                return false;
             }
         });
+
+        $("#newGroup").replaceWith(
+            "<li> \
+                <p id='" + group_name + "'> \
+                    <a class='group'>" + group_name + "</a> \
+                </p> \
+            </li>"
+        );
+
+        $(".dropdown-content").append(
+            "<a class='addTo'>" + group_name + "</a>"
+        );
         return false;
     });
 });
