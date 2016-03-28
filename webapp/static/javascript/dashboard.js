@@ -33,8 +33,8 @@ function displayGroups(groups) {
                 </li>";
         }
         result +=
-            "<li> \
-                <p id='AddGroup'><a class='group' href=''>+ Add Group</a></p> \
+            "<li id='addGroup'> \
+                <p><a class='AddGroup'>+ Add Group</a></p> \
             </li>";
 
         return result;
@@ -61,7 +61,7 @@ $(document).ready(function() {
         console.log(data.toElement.innerText);
         $.ajax({
             method: "GET",
-            url: "/group/" + data.toElement.innerText + "/",
+            url: "/group/?group_name=" + data.toElement.innerText,
             datatype: "json",
             success: function(data) {
                 clearPosts();
@@ -74,6 +74,38 @@ $(document).ready(function() {
                 alert("nooooooooooooo");
             },
         });
+    });
+
+    $(document.body).on("click", ".AddGroup", function (data) {
+        if ($("#newGroup").length == 0) {
+            $("#addGroup").before(
+                '<li id="newGroup"> \
+                    <form> \
+                        <input type="text" name="group_name" placeholder="Group Name"> \
+                    </form> \
+                </li>'
+            );
+        } else {
+            $("#newGroup").append(
+                '<p style="color: red;">Enter a new group name.</p>'
+            );
+        }
+    });
+
+    $(document.body).on("submit", "form", function(data) {
+        var group_name = $("input:first").val();
+        $.ajax({
+            method: "GET",
+            url: "/group/add/?group_name=" + group_name,
+            datatype: "json",
+            success: function(data) {
+                alert("added group");
+            },
+            error: function(data) {
+                alert("Error: Could not add group.");
+            }
+        });
+        return false;
     });
 });
 

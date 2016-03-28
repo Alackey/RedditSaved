@@ -51,15 +51,28 @@ def groups(request):
     return HttpResponse(response, content_type="application/json")
 
 
-def group(request, group_name):
-    print("hello: ", group_name)
+def group(request):
+    print("hello: ", request.GET['group_name'])
 
     response = serializers.serialize(
         "json",
-        Group.objects.filter(username="Tech_Runner", groupname=group_name)
+        Group.objects.filter(
+            username="Tech_Runner",
+            groupname=request.GET['group_name']
+        )
     )
 
     return HttpResponse(response, content_type="application/json")
+
+
+def groupAdd(request):
+    user = r.get_me()
+    Group.objects.create(
+        username=user.name,
+        groupname=request.GET['group_name']
+    )
+    print("add the group")
+    return HttpResponse("Added group")
 
 
 def unsave(request):

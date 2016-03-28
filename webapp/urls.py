@@ -8,5 +8,7 @@ urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^unsave/$', views.unsave, name='unsave'),
     url(r'^groups/$', views.groups, name='groups'),
-    url(r'^group/(?P<group_name>\w+)/$', views.group, name='group'),
+    url(r'^group/$', views.group, name='group'),
+    url(r'^group/add/$', views.groupAdd, name='groupAdd'),
+    # url(r'^group/(?P<group_name>\w+)/$', views.group, name='group'),
 ]
