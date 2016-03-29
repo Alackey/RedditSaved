@@ -61,7 +61,7 @@ $(document).ready(function() {
 
     //Group Clicked
     $(document.body).on("click", ".group", function (data) {
-        alert("Group clicked");
+
         console.log(data.toElement.innerText);
         $.ajax({
             method: "GET",
@@ -125,18 +125,24 @@ $(document).ready(function() {
 
     //Adding checked posts to a group
     $(document.body).on("click", ".addTo", function (data) {
-        console.log("addTo clicked");
-        var checked = $("input:checked");
-        $('input:checked').each(function() {
-            if ($(this).next().is("h3")) {      //Submission
-                console.log($(this).next().text());
-                $(this).next().next().children().each(function() {
-                    console.log($(this).text());
-                });
-            } else {    //Comment
 
+        var posts = getChecked();
+
+        $.ajax({
+            method: "POST",
+            url: "/posts/add/",
+            data: JSON.stringify(
+                {"group_name": data.toElement.innerText, "posts": posts}
+            ),
+            datatype: "json",
+            success: function(msg) {
+                console.log(msg);
             }
         });
+
+        for(var post of posts) {
+            console.log(JSON.stringify(post));
+        }
     });
 });
 
@@ -180,11 +186,58 @@ function constructSubmission(submission) {
         <div class="post-options"> \
             <a href="' + submission.post_link + '">Comments</a> \
             <a href="">Unsave</a> \
-            <span>t3_4blhxt</span> \
+            <span>' + submission.name + '</span> \
         </div> \
         <hr>';
 
     return resultHTML;
+}
+
+//Get checked posts as JSON
+function getChecked() {
+    var posts = [];
+
+    $('input:checked').each(function() {
+        var result, post_link, title, body, unsaveURL, name;
+
+        if ($(this).next().is("h3")) {    //Submission
+            console.log($(this).next().text());
+
+            title = $(this).next().text();
+            $(this).next().next().children().each(function() {
+                if ($(this).text() == "Comments") {
+                    post_link = $(this).attr("href");
+                } else if ($(this).text() == "Unsave") {
+                    unsaveURL = $(this).attr("href");
+                } else {
+                    name = $(this).text();
+                }
+            });
+            result = {
+                "post_link": post_link,
+                "title": title,
+                "unsaveURL": unsaveURL,
+                "name": name
+            };
+            posts.push(result);
+        } else {    //Comment
+            body = $(this).next().text();
+            $(this).next().next().children().each(function() {
+                if ($(this).text() == "Comments") {
+                    post_link = $(this).attr("href");
+                } else if ($(this).text() != "Unsave") {
+                    name = $(this).text();
+                }
+            });
+            result = {
+                "post_link": post_link,
+                "body": body,
+                "name": name
+            };
+            posts.push(result);
+        }
+    });
+    return posts;
 }
 
 //Clear all posts
