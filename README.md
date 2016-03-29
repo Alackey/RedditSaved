@@ -14,4 +14,5 @@ A website to manage and store saved posts and comments from Reddit.
 * Rename groups
 * Search saved posts
 * Order saved posts
+* Already in group warnings
 * ~~Add Group button~~

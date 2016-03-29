@@ -2,6 +2,7 @@ window.onload = function() {
     loadGroups();
 };
 
+//Display groups in sidebar/dropdown
 function loadGroups() {
     $.ajax({
         method: "GET",
@@ -16,6 +17,7 @@ function loadGroups() {
     });
 }
 
+//Display groups in sidebar
 function displayGroups(groups) {
     $(".sidebar-nav").html(function() {
         var result =
@@ -41,6 +43,7 @@ function displayGroups(groups) {
     });
 }
 
+//Display groups in dropdown menu
 function displayDropdownMenu(groups) {
     $(".dropdown-content").html(function() {
         var resultHTML = "";
@@ -56,6 +59,7 @@ function displayDropdownMenu(groups) {
 
 $(document).ready(function() {
 
+    //Group Clicked
     $(document.body).on("click", ".group", function (data) {
         alert("Group clicked");
         console.log(data.toElement.innerText);
@@ -75,6 +79,7 @@ $(document).ready(function() {
         });
     });
 
+    //Add a new group
     $(document.body).on("click", ".AddGroup", function (data) {
         if ($("#newGroup").length == 0) {
             $("#addGroup").before(
@@ -91,6 +96,7 @@ $(document).ready(function() {
         }
     });
 
+    //Group name specified
     $(document.body).on("submit", "form", function(data) {
         var group_name = $("input:first").val();
         $.ajax({
@@ -116,8 +122,25 @@ $(document).ready(function() {
         );
         return false;
     });
+
+    //Adding checked posts to a group
+    $(document.body).on("click", ".addTo", function (data) {
+        console.log("addTo clicked");
+        var checked = $("input:checked");
+        $('input:checked').each(function() {
+            if ($(this).next().is("h3")) {      //Submission
+                console.log($(this).next().text());
+                $(this).next().next().children().each(function() {
+                    console.log($(this).text());
+                });
+            } else {    //Comment
+
+            }
+        });
+    });
 });
 
+//Display posts in the group
 function displayPosts(posts) {
     var postsHTML = "";
 
@@ -132,6 +155,7 @@ function displayPosts(posts) {
     $(".posts-container").html(postsHTML);
 }
 
+//Create comment in HTML
 function constructComment(comment) {
 
     var resultHTML =
@@ -147,6 +171,7 @@ function constructComment(comment) {
     return resultHTML;
 }
 
+//Create submission in HTML
 function constructSubmission(submission) {
 
     var resultHTML =
@@ -162,6 +187,7 @@ function constructSubmission(submission) {
     return resultHTML;
 }
 
+//Clear all posts
 function clearPosts() {
     $(".posts-container").html("");
 }
