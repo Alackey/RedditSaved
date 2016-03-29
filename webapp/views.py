@@ -78,25 +78,16 @@ def postsAdd(request):
 
     posts_unicode = request.body.decode('utf-8')
     posts = json.loads(posts_unicode)
-    for post in posts['posts']:
-        print("group: " + json.dumps(post))
-    # print("Group: " + json.dumps(posts['posts'][0]))
 
-    #response = serializers.serialize(
-    #    "json",
     group = Group.objects.get(
             username="Tech_Runner",
             groupname=str(posts['group_name'])
         )
-    #)
 
-    data = group.posts['data'] # .push(posts['posts'])
     for post in posts['posts']:
         group.posts['data'].append(post)
-    print(group.posts['data'])
     group.save()
-    # print(json.loads(response)[0]['fields']['posts'])
-    # print(json.dumps(response))
+
     return HttpResponse("Posts added to group")
 
 
