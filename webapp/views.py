@@ -42,25 +42,24 @@ def dashboard(request):
 
 
 def groups(request):
+    user = r.get_me()
     response = {}
     response = serializers.serialize(
         "json",
-        Group.objects.filter(username="Tech_Runner")
+        Group.objects.filter(username=user.name)
     )
-    print(response)
     return HttpResponse(response, content_type="application/json")
 
 
 def group(request):
-
+    user = r.get_me()
     response = serializers.serialize(
         "json",
         Group.objects.filter(
-            username="Tech_Runner",
+            username=user.name,
             groupname=request.GET['group_name']
         )
     )
-    print(json.dumps(response))
     return HttpResponse(response, content_type="application/json")
 
 
@@ -70,17 +69,16 @@ def groupAdd(request):
         username=user.name,
         groupname=request.GET['group_name']
     )
-    print("add the group")
     return HttpResponse("Added group")
 
 
 def postsAdd(request):
-
+    user = r.get_me()
     posts_unicode = request.body.decode('utf-8')
     posts = json.loads(posts_unicode)
 
     group = Group.objects.get(
-            username="Tech_Runner",
+            username=user.name,
             groupname=str(posts['group_name'])
         )
 
@@ -93,15 +91,9 @@ def postsAdd(request):
 
 def unsave(request):
 
-    start = time.time()
     submission = r.get_submission(request.GET['postLink'])
     comments = list(submission.comments)
-    print(comments[0].body)
     comments[0].unsave()
-    submission = r.get_submission(request.GET['postLink'])
-    comments = list(submission.comments)
-    done = time.time()
-    print(done - start)
 
     return HttpResponse("return this string")
 
@@ -125,5 +117,3 @@ def build_url(url, api_params):
 def authorize(code):
     access_information = r.get_access_information(code)
     r.refresh_access_information(access_information['refresh_token'])
-    user = r.get_me()
-    print(user.name, user.link_karma)
