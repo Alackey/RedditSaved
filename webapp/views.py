@@ -47,8 +47,11 @@ def dashboard(request):
 
 
 def dashboard_group(request, group_name):
+
+    if group_name == "Home":
+        return HttpResponseRedirect('/dashboard/')
+
     posts = get_group_posts_json(group_name)
-    print(posts)
     return render(request, 'webapp/posts.html', {'groupPosts': posts})
 
 
@@ -63,9 +66,7 @@ def groups(request):
 
 
 def group(request):
-
     posts = get_group_posts_json(request.GET['group_name'], as_json=True)
-
     return HttpResponse(posts, content_type="application/json")
 
 
@@ -139,7 +140,6 @@ def callback(request):
 
 
 def get_group_posts_json(group_name, as_json=None):
-    print(group_name)
     user = r.get_me()
 
     group = get_object_or_404(

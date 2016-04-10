@@ -58,6 +58,13 @@ $(document).ready(function() {
 
     //Group Clicked
     $(document.body).on("click", ".group", function (data) {
+
+        if (data.toElement.innerText == "Home") {
+            window.history.pushState(null, null, "/dashboard/" );
+            window.location = "http://127.0.0.1:8000/dashboard/";
+            return;
+        }
+
         window.history.pushState(null, null, "/dashboard/" + data.toElement.innerText);
         $.ajax({
             method: "GET",
