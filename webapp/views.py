@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
-from .models import Group
+from .models import Group, Post
 import json
 import requests
 import time
@@ -38,6 +38,7 @@ def dashboard(request):
         savedPosts = list(r.user.get_saved())
     except:
         return redirect('/')
+
     return render(request, 'webapp/posts.html', {'savedPosts': savedPosts})
 
 
@@ -53,14 +54,17 @@ def groups(request):
 
 def group(request):
     user = r.get_me()
-    response = serializers.serialize(
-        "json",
-        Group.objects.filter(
-            username=user.name,
-            groupname=request.GET['group_name']
-        )
+
+    group = Group.objects.get(
+        username=user.name,
+        groupname=request.GET['group_name']
     )
-    return HttpResponse(response, content_type="application/json")
+    posts = serializers.serialize(
+        "json",
+        Post.objects.filter(group=group)
+    )
+
+    return HttpResponse(posts, content_type="application/json")
 
 
 def groupAdd(request):
@@ -78,12 +82,34 @@ def postsAdd(request):
     posts = json.loads(posts_unicode)
 
     group = Group.objects.get(
-            username=user.name,
-            groupname=str(posts['group_name'])
-        )
+        username=user.name,
+        groupname=str(posts['group_name'])
+    )
 
     for post in posts['posts']:
+        if (post['type'] == 'comment'):
+            Post(
+                group=group,
+                post_link=post['post_link'],
+                unsaveURL=post['unsaveURL'],
+                name=post['name'],
+                body=post['body'],
+                type=post['type']
+            ).save()
+            print(post['body'])
+        else:
+            Post(
+                group=group,
+                post_link=post['post_link'],
+                unsaveURL=post['unsaveURL'],
+                name=post['name'],
+                title=post['title'],
+                url=post['url'],
+                type=post['type']
+            ).save()
+            print(post['url'])
         group.posts['data'].append(post)
+
     group.save()
 
     return HttpResponse("Posts added to group")

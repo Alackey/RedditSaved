@@ -61,20 +61,17 @@ $(document).ready(function() {
 
     //Group Clicked
     $(document.body).on("click", ".group", function (data) {
-
-        console.log(data.toElement.innerText);
         $.ajax({
             method: "GET",
             url: "/group/?group_name=" + data.toElement.innerText,
             datatype: "json",
             success: function(data) {
                 clearPosts();
-                displayPosts(data[0].fields.posts.data);
-                console.log("data: " + JSON.stringify(data[0].fields.posts.data));
+                displayPosts(data);
             },
             error: function(data) {
                 console.log(data);
-                alert("nooooooooooooo");
+                alert("Could not get posts for " + data.toElement.innerText);
             },
         });
     });
@@ -151,9 +148,9 @@ function displayPosts(posts) {
     var postsHTML = "";
 
     for (var post of posts) {
-        if(post.body) {
+        post = post.fields;
+        if(post.type == "comment") {
             postsHTML += constructComment(post);
-            console.log("%cBody Exits", 'background:  yellow;');
         } else {
             postsHTML += constructSubmission(post);
         }
@@ -169,7 +166,7 @@ function constructComment(comment) {
         <h4 class="inline">' + comment.body + '</h4> \
         <div class="post-options"> \
             <a href="' + comment.post_link + '">Comments</a> \
-            <a href="/unsave/?postLink=' + comment.post_link + '&type=comment">Unsave</a> \
+            <a href="' + comment.unsaveURL + '">Unsave</a> \
             <span>' + comment.name + '</span> \
         </div> \
         <hr>';
@@ -185,7 +182,7 @@ function constructSubmission(submission) {
         <h3 class="inline"><a href="' + submission.url +'">' + submission.title +'</a></h3> \
         <div class="post-options"> \
             <a href="' + submission.post_link + '">Comments</a> \
-            <a href="">Unsave</a> \
+            <a href="' + submission.unsaveURL + '">Unsave</a> \
             <span>' + submission.name + '</span> \
         </div> \
         <hr>';
@@ -198,12 +195,33 @@ function getChecked() {
     var posts = [];
 
     $('input:checked').each(function() {
-        var result, post_link, title, body, unsaveURL, name;
+        var result, post_link, title, body, unsaveURL, name, url;
 
         if ($(this).next().is("h3")) {    //Submission
-            console.log($(this).next().text());
 
             title = $(this).next().text();
+            url = $(this).next().html().split('"')[1];
+            $(this).next().next().children().each(function() {
+                if ($(this).text() == "Comments") {
+                    post_link = $(this).attr("href");
+                } else if ($(this).text() == "Unsave") {
+                    unsaveURL = $(this).attr("href");
+                } else {
+                    name = $(this).text();
+                }
+            });
+
+            result = {
+                "post_link": post_link,
+                "title": title,
+                "url": url,
+                "unsaveURL": unsaveURL,
+                "name": name,
+                "type": "submission",
+            };
+            posts.push(result);
+        } else {    //Comment
+            body = $(this).next().text();
             $(this).next().next().children().each(function() {
                 if ($(this).text() == "Comments") {
                     post_link = $(this).attr("href");
@@ -215,24 +233,10 @@ function getChecked() {
             });
             result = {
                 "post_link": post_link,
-                "title": title,
-                "unsaveURL": unsaveURL,
-                "name": name
-            };
-            posts.push(result);
-        } else {    //Comment
-            body = $(this).next().text();
-            $(this).next().next().children().each(function() {
-                if ($(this).text() == "Comments") {
-                    post_link = $(this).attr("href");
-                } else if ($(this).text() != "Unsave") {
-                    name = $(this).text();
-                }
-            });
-            result = {
-                "post_link": post_link,
                 "body": body,
-                "name": name
+                "unsaveURL": unsaveURL,
+                "name": name,
+                "type": "comment",
             };
             posts.push(result);
         }

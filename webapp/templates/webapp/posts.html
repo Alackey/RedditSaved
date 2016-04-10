@@ -14,7 +14,7 @@
                 {% with postLink=post.link_url id=post.id %}
                     <a href="{{ postLink }}{{ id }}">Comments</a>
                     <a href="{% url 'unsave' %}?postLink={{postLink}}{{id}}&type=comment">Unsave</a>
-                {% endwith %}    
+                {% endwith %}
 
                 <span>{{ post.name }}</span>
             </div>
@@ -24,7 +24,7 @@
             <h3 class="inline"><a href="{{ post.url }}">{{ post.title }}</a></h3>
             <div class="post-options">
                 <a href="{{ post.permalink }}">Comments</a>
-                <a href="">Unsave</a>
+                <a href="{% url 'unsave' %}?id=post.id&type=submission">Unsave</a>
                 <span>{{ post.name }}</span>
             </div>
         {% endif %}
