@@ -6,6 +6,8 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^callback/$', views.callback, name='callback'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
+    url(r'^dashboard/(?P<group_name>[\w.@+-]+)$',
+        views.dashboard_group, name='dashboard_group'),
     url(r'^unsave/$', views.unsave, name='unsave'),
     url(r'^groups/$', views.groups, name='groups'),
     url(r'^group/$', views.group, name='group'),

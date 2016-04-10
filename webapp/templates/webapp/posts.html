@@ -3,36 +3,67 @@
 
 {% block posts %}
 <div class="posts-container">
-    <h1 id="pageTitle">Dashboard</h1>
+    {% if savedPosts %}
+        <h1 id="pageTitle">Dashboard</h1>
 
-    {% for post in savedPosts %}
-        <div class="post">
-        {% if post.body %} <!-- Comment -->
-            <input type="checkbox" name="selection" value="selected" class="selection">
-            <h4 class="inline">{{ post.body }}</h4>
-            <div class="post-options">
-                {% with postLink=post.link_url id=post.id %}
-                    <a href="{{ postLink }}{{ id }}" class="comments">Comments</a>
-                    <a href="{% url 'unsave' %}?postLink={{postLink}}{{id}}&type=comment" class="unsave">Unsave</a>
-                {% endwith %}
+        {% for post in savedPosts %}
+            <div class="post">
+            {% if post.body %} <!-- Comment -->
+                <input type="checkbox" name="selection" value="selected" class="selection">
+                <h4 class="inline">{{ post.body }}</h4>
+                <div class="post-options">
+                    {% with postLink=post.link_url id=post.id %}
+                        <a href="{{ postLink }}{{ id }}" class="comments">Comments</a>
+                        <a href="{% url 'unsave' %}?postLink={{postLink}}{{id}}&type=comment" class="unsave">Unsave</a>
+                    {% endwith %}
 
-                <span>{{ post.name }}</span>
+                    <span>{{ post.name }}</span>
+                </div>
+
+            {% else %} <!-- Submission -->
+                <input type="checkbox" name="selection" value="selected" class="selection">
+                <h3 class="inline"><a href="{{ post.url }}">{{ post.title }}</a></h3>
+                <div class="post-options">
+                    <a href="{{ post.permalink }}" class="comments">Comments</a>
+                    <a href="{% url 'unsave' %}?id={{post.id}}&type=submission" class="unsave">
+                        Unsave
+                    </a>
+                    <span>{{ post.name }}</span>
+                </div>
+            {% endif %}
+
+            <hr>
             </div>
+        {% endfor %}
+    {% else %}
+        <span>groupPosts</span>
+        {% for post in groupPosts %}
+            <div class="post">
+            {% if post.type == "comment" %} <!-- Comment -->
+                <input type="checkbox" name="selection" value="selected" class="selection">
+                <h4 class="inline">{{ post.body }}</h4>
+                <div class="post-options">
+                    <a href="{{ post.post_link }}" class="comments">Comments</a>
+                    <a href="{{ post.unsaveURL }}" class="unsave">Unsave</a>
+                    <span>{{ post.name }}</span>
+                </div>
 
-        {% else %} <!-- Submission -->
-            <input type="checkbox" name="selection" value="selected" class="selection">
-            <h3 class="inline"><a href="{{ post.url }}">{{ post.title }}</a></h3>
-            <div class="post-options">
-                <a href="{{ post.permalink }}" class="comments">Comments</a>
-                <a href="{% url 'unsave' %}?id={{post.id}}&type=submission" class="unsave">
-                    Unsave
-                </a>
-                <span>{{ post.name }}</span>
+            {% else %} <!-- Submission -->
+                <input type="checkbox" name="selection" value="selected" class="selection">
+                <h3 class="inline"><a href="{{ post.url }}">{{ post.title }}</a></h3>
+                <div class="post-options">
+                    <a href="{{ post.post_link }}" class="comments">Comments</a>
+                    <a href="{{ post.unsaveURL }}" class="unsave">
+                        Unsave
+                    </a>
+                    <span>{{ post.name }}</span>
+                </div>
+            {% endif %}
+
+            <hr>
             </div>
-        {% endif %}
+        {% endfor %}
 
-        <hr>
-        </div>
-    {% endfor %}
+    {% endif %}
 </div>
 {% endblock %}

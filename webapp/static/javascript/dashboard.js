@@ -58,6 +58,7 @@ $(document).ready(function() {
 
     //Group Clicked
     $(document.body).on("click", ".group", function (data) {
+        window.history.pushState(null, null, "/dashboard/" + data.toElement.innerText);
         $.ajax({
             method: "GET",
             url: "/group/?group_name=" + data.toElement.innerText,

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core import serializers
 from .models import Group, Post
@@ -46,6 +46,12 @@ def dashboard(request):
     return render(request, 'webapp/posts.html', {'savedPosts': savedPosts})
 
 
+def dashboard_group(request, group_name):
+    posts = get_group_posts_json(group_name)
+    print(posts)
+    return render(request, 'webapp/posts.html', {'groupPosts': posts})
+
+
 def groups(request):
     user = r.get_me()
     response = {}
@@ -57,16 +63,8 @@ def groups(request):
 
 
 def group(request):
-    user = r.get_me()
 
-    group = Group.objects.get(
-        username=user.name,
-        groupname=request.GET['group_name']
-    )
-    posts = serializers.serialize(
-        "json",
-        Post.objects.filter(group=group)
-    )
+    posts = get_group_posts_json(request.GET['group_name'], as_json=True)
 
     return HttpResponse(posts, content_type="application/json")
 
@@ -138,6 +136,25 @@ def callback(request):
     Functions
 
 '''
+
+
+def get_group_posts_json(group_name, as_json=None):
+    print(group_name)
+    user = r.get_me()
+
+    group = get_object_or_404(
+        Group,
+        username=user.name,
+        groupname=group_name
+    )
+    if as_json is not None:
+        posts = serializers.serialize(
+            "json",
+            Post.objects.filter(group=group)
+        )
+    else:
+        posts = Post.objects.filter(group=group )
+    return posts
 
 
 def build_url(url, api_params):
