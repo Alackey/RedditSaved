@@ -3,17 +3,17 @@
 
 {% block posts %}
 <div class="posts-container">
-    <h1>Dashboard</h1>
-    <p> posts</p>
-    {% for post in savedPosts %}
+    <h1 id="pageTitle">Dashboard</h1>
 
+    {% for post in savedPosts %}
+        <div class="post">
         {% if post.body %} <!-- Comment -->
             <input type="checkbox" name="selection" value="selected" class="selection">
             <h4 class="inline">{{ post.body }}</h4>
             <div class="post-options">
                 {% with postLink=post.link_url id=post.id %}
-                    <a href="{{ postLink }}{{ id }}">Comments</a>
-                    <a href="{% url 'unsave' %}?postLink={{postLink}}{{id}}&type=comment">Unsave</a>
+                    <a href="{{ postLink }}{{ id }}" class="comments">Comments</a>
+                    <a href="{% url 'unsave' %}?postLink={{postLink}}{{id}}&type=comment" class="unsave">Unsave</a>
                 {% endwith %}
 
                 <span>{{ post.name }}</span>
@@ -23,13 +23,16 @@
             <input type="checkbox" name="selection" value="selected" class="selection">
             <h3 class="inline"><a href="{{ post.url }}">{{ post.title }}</a></h3>
             <div class="post-options">
-                <a href="{{ post.permalink }}">Comments</a>
-                <a href="{% url 'unsave' %}?id=post.id&type=submission">Unsave</a>
+                <a href="{{ post.permalink }}" class="comments">Comments</a>
+                <a href="{% url 'unsave' %}?id={{post.id}}&type=submission" class="unsave">
+                    Unsave
+                </a>
                 <span>{{ post.name }}</span>
             </div>
         {% endif %}
 
         <hr>
+        </div>
     {% endfor %}
 </div>
 {% endblock %}

@@ -11,9 +11,6 @@ function loadGroups() {
     }).done(function( groups ) {
         displayGroups(groups);
         displayDropdownMenu(groups);
-        for (var group of groups) {
-            console.log("Group: " + JSON.stringify(group.fields));
-        }
     });
 }
 
@@ -70,7 +67,6 @@ $(document).ready(function() {
                 displayPosts(data);
             },
             error: function(data) {
-                console.log(data);
                 alert("Could not get posts for " + data.toElement.innerText);
             },
         });
@@ -132,14 +128,30 @@ $(document).ready(function() {
                 {"group_name": data.toElement.innerText, "posts": posts}
             ),
             datatype: "json",
-            success: function(msg) {
-                console.log(msg);
+            error: function(data) {
+                alert("Could not add posts to group.");
             }
         });
+    });
 
-        for(var post of posts) {
-            console.log(JSON.stringify(post));
-        }
+    //Group Clicked
+    $(document.body).on("click", ".unsave", function (e) {
+        var thisobj = $(this);
+        $.ajax({
+            method: "GET",
+            url: $(thisobj).attr("href"),
+            datatype: "json",
+            success: function(data) {
+                if ($("#pageTitle").text() == "Dashboard") {
+                    $(thisobj).parent().parent().remove();
+                }
+            },
+            error: function(data) {
+                alert("Could not unsave posts.");
+            },
+        });
+        e.preventDefault();
+        e.stopPropagation();
     });
 });
 
@@ -165,8 +177,8 @@ function constructComment(comment) {
         '<input type="checkbox" name="selection" value="selected" class="selection"> \
         <h4 class="inline">' + comment.body + '</h4> \
         <div class="post-options"> \
-            <a href="' + comment.post_link + '">Comments</a> \
-            <a href="' + comment.unsaveURL + '">Unsave</a> \
+            <a href="' + comment.post_link + '" class="comments">Comments</a> \
+            <a href="' + comment.unsaveURL + '" class="unsave">Unsave</a> \
             <span>' + comment.name + '</span> \
         </div> \
         <hr>';
@@ -181,8 +193,8 @@ function constructSubmission(submission) {
     '<input type="checkbox" name="selection" value="selected" class="selection"> \
         <h3 class="inline"><a href="' + submission.url +'">' + submission.title +'</a></h3> \
         <div class="post-options"> \
-            <a href="' + submission.post_link + '">Comments</a> \
-            <a href="' + submission.unsaveURL + '">Unsave</a> \
+            <a href="' + submission.post_link + '" class="comments">Comments</a> \
+            <a href="' + submission.unsaveURL + '" class="unsave">Unsave</a> \
             <span>' + submission.name + '</span> \
         </div> \
         <hr>';
@@ -204,7 +216,7 @@ function getChecked() {
             $(this).next().next().children().each(function() {
                 if ($(this).text() == "Comments") {
                     post_link = $(this).attr("href");
-                } else if ($(this).text() == "Unsave") {
+                } else if ($(this).text().trim() == "Unsave") {
                     unsaveURL = $(this).attr("href");
                 } else {
                     name = $(this).text();

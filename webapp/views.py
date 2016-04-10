@@ -96,7 +96,6 @@ def postsAdd(request):
                 body=post['body'],
                 type=post['type']
             ).save()
-            print(post['body'])
         else:
             Post(
                 group=group,
@@ -107,19 +106,20 @@ def postsAdd(request):
                 url=post['url'],
                 type=post['type']
             ).save()
-            print(post['url'])
-        group.posts['data'].append(post)
-
-    group.save()
 
     return HttpResponse("Posts added to group")
 
 
 def unsave(request):
 
-    submission = r.get_submission(request.GET['postLink'])
-    comments = list(submission.comments)
-    comments[0].unsave()
+    if request.GET['type'] == "comment":
+        submission = r.get_submission(request.GET['postLink'])
+        comments = list(submission.comments)
+        comments[0].unsave()
+    else:
+        print(request.GET['id'])
+        submission = r.get_submission(submission_id=request.GET['id'])
+        submission.unsave()
 
     return HttpResponse("return this string")
 
