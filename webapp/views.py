@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core import serializers
 from .models import Group, Post
 import json
@@ -16,6 +16,10 @@ savedPosts = []
 
 
 def home(request):
+
+    if r.is_oauth_session():
+        return HttpResponseRedirect('/dashboard/')
+
     r.set_oauth_app_info(
         client_id='R0RrAiBvmgk-3Q',
         client_secret='YPVjlyJoon9CsONiCU4TnJK8-Z8',
